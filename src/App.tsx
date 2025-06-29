@@ -6,12 +6,14 @@ import Ong from "./pages/DetalleOng";
 import Historial from "./pages/Historial";
 import Solicitudes from "./pages/Solicitudes";
 import Validaciones from "./pages/Validaciones";
+import Registro from "./pages/Registro";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/Registro" element={<Registro />} />
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<Solicitudes />} />
           <Route path="ong" element={<Ong />} />
