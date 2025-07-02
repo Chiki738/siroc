@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/representantes";
+const API_URL = "https://hexagonal-63ip.onrender.com/api/representantes";
 
 // Crear un representante
 export const crearRepresentante = async (representante: {

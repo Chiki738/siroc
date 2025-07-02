@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api/sectores";
+const BASE_URL = "https://hexagonal-63ip.onrender.com/api/sectores";
 
 // Obtener todos los sectores
 export async function obtenerSectores() {

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api/regiones";
+const BASE_URL = "https://hexagonal-63ip.onrender.com/api/regiones";
 
 // Obtener todas las regiones
 export async function obtenerRegiones() {

@@ -6,7 +6,7 @@ export async function obtenerDatosReniecPorDni(
   dni: string
 ): Promise<DatosReniec | null> {
   try {
-    const response = await fetch(`http://localhost:8080/api/reniec/dni/${dni}`);
+    const response = await fetch(`https://hexagonal-63ip.onrender.com/api/reniec/dni/${dni}`);
     if (!response.ok)
       throw new Error("No se pudo obtener la información de RENIEC");
     return await response.json();

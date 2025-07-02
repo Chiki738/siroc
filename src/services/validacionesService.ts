@@ -1,7 +1,7 @@
 // src/services/validacionesService.ts
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/validaciones";
+const API_URL = "https://hexagonal-63ip.onrender.com/api/validaciones";
 
 export const crearValidacion = async (ruc: string) => {
   const nuevaValidacion = {

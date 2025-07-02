@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api/ongs";
+const API_URL = "https://hexagonal-63ip.onrender.com/api/ongs";
 
 // Crear ONG a partir de un formulario HTML
 export const enviarOng = async (form: HTMLFormElement) => {

@@ -28,7 +28,7 @@ export const subirAdjunto = async (
     ruc,
   };
 
-  const backendRes = await fetch("http://localhost:8080/api/adjuntos/crear", {
+  const backendRes = await fetch("https://hexagonal-63ip.onrender.com/api/adjuntos/crear", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export interface Adjunto {
 export const obtenerAdjuntosPorOng = async (
   ongId: number
 ): Promise<Adjunto[]> => {
-  const res = await fetch(`http://localhost:8080/api/adjuntos/ong/${ongId}`);
+  const res = await fetch(`https://hexagonal-63ip.onrender.com/api/adjuntos/ong/${ongId}`);
   if (!res.ok) {
     throw new Error("Error al obtener adjuntos de la ONG");
   }
