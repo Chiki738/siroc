@@ -42,12 +42,6 @@ function Header() {
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/historial">
-                Historial
-              </Link>
-            </li>
-
-            <li className="nav-item">
               <Link className="nav-link" to="/admin/dashboard">
                 Dashboard
               </Link>
