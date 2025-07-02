@@ -36,12 +36,6 @@ function Header() {
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/ong">
-                ONG
-              </Link>
-            </li>
-
-            <li className="nav-item">
               <Link className="nav-link" to="/admin/validaciones">
                 Validaciones
               </Link>

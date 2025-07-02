@@ -1,8 +1,19 @@
 import "../assets/styles/Login.css";
 import logo from "../assets/img/logo.png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useAuthService } from "../hooks/useAuthService";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuthService();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login(email, password);
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-secondary bg-gradient">
       <div
@@ -29,10 +40,11 @@ function Login() {
           </p>
         </div>
 
-        {/* Columna derecha: formulario */}
+        {/* Columna derecha */}
         <form
           className="p-5 d-flex flex-column justify-content-center"
-          style={{ width: "50%" }}>
+          style={{ width: "50%" }}
+          onSubmit={handleSubmit}>
           <h3 className="mb-4 text-center text-black fw-bold">
             INICIAR SESIÓN
           </h3>
@@ -41,6 +53,8 @@ function Login() {
             type="email"
             placeholder="Ingresar correo electrónico"
             className="form-control mb-3"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
@@ -48,14 +62,16 @@ function Login() {
             type="password"
             placeholder="Ingresar contraseña"
             className="form-control mb-3"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          <Link
-            to="/Admin"
+          <button
+            type="submit"
             className="btn btn-primary fw-bold text-white w-100 mt-2">
             Iniciar Sesión
-          </Link>
+          </button>
 
           <p className="text-center pt-4 mb-0" style={{ fontSize: "14px" }}>
             ¿Desea registrar una ONG?&nbsp;

@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import Dashboard from "./pages/Dashboard";
 import Ong from "./pages/DetalleOng";
-import Historial from "./pages/Historial";
 import Solicitudes from "./pages/Solicitudes";
 import Validaciones from "./pages/Validaciones";
 import Registro from "./pages/Registro";
@@ -16,9 +15,8 @@ function App() {
         <Route path="/Registro" element={<Registro />} />
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<Solicitudes />} />
-          <Route path="ong" element={<Ong />} />
           <Route path="validaciones" element={<Validaciones />} />
-          <Route path="historial" element={<Historial />} />
+          <Route path="ong/:id" element={<Ong />} />
           <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
