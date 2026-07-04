@@ -1,20 +1,17 @@
-const BASE_URL = "https://hexagonal-63ip.onrender.com/api/sectores";
+import { API_ENDPOINTS } from "../config/api";
 
-// Obtener todos los sectores
 export async function obtenerSectores() {
-  const response = await fetch(BASE_URL);
+  const response = await fetch(API_ENDPOINTS.sectores);
   if (!response.ok) throw new Error("Error al obtener sectores");
   return response.json();
 }
 
-// Obtener solo el nombre limpio del sector por ID
 export async function obtenerNombreSectorPorId(id: number): Promise<string> {
   try {
-    const response = await fetch(`${BASE_URL}/${id}`);
+    const response = await fetch(`${API_ENDPOINTS.sectores}/${id}`);
     if (!response.ok) throw new Error("No se pudo obtener el sector");
 
     const data = await response.json();
-    // Eliminar cualquier texto como "(1)", "(12)", etc.
     const nombreLimpio = data.nombre.replace(/\s*\(\d+\)/, "").trim();
     return nombreLimpio;
   } catch (error) {

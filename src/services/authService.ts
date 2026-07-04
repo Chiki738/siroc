@@ -1,11 +1,9 @@
-// src/services/authService.ts
 import axios from "axios";
-
-const API_URL = "https://hexagonal-63ip.onrender.com/api/auth";
+import { API_ENDPOINTS } from "../config/api";
 
 export const authService = {
   login: async (email: string, password: string): Promise<boolean> => {
-    const response = await axios.post(`${API_URL}/login`, {
+    const response = await axios.post(`${API_ENDPOINTS.auth}/login`, {
       email,
       password,
     });

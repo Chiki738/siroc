@@ -1,4 +1,5 @@
 import locale
+import os
 import pandas as pd
 import plotly.express as px
 from flask import Flask, render_template_string
@@ -22,27 +23,30 @@ except locale.Error:
     except locale.Error:
         print("Advertencia: No se pudo configurar el locale 'es_ES.UTF-8' o 'es_ES'. Los nombres de los meses podrían no estar en español.")
 
-NEON_DB_HOST = "ep-soft-hill-a58y8rpi-pooler.us-east-2.aws.neon.tech"
-NEON_DB_NAME = "neondb"
-NEON_DB_USER = "neondb_owner"
-NEON_DB_PASSWORD = "npg_zmwsAx7W3Rpa"
-NEON_DB_PORT = "5432"
+NEON_DB_HOST = os.getenv("NEON_DB_HOST")
+NEON_DB_NAME = os.getenv("NEON_DB_NAME")
+NEON_DB_USER = os.getenv("NEON_DB_USER")
+NEON_DB_PASSWORD = os.getenv("NEON_DB_PASSWORD")
+NEON_DB_PORT = os.getenv("NEON_DB_PORT", "5432")
 
 db_pool = None
-try:
-    db_pool = pool.ThreadedConnectionPool(
-        minconn=1,
-        maxconn=5,
-        host=NEON_DB_HOST,
-        database=NEON_DB_NAME,
-        user=NEON_DB_USER,
-        password=NEON_DB_PASSWORD,
-        port=NEON_DB_PORT,
-        sslmode='require'
-    )
-    print("Pool de conexiones a la base de datos inicializado exitosamente.")
-except Exception as e:
-    print(f"Error al inicializar el pool de conexiones: {e}")
+if all([NEON_DB_HOST, NEON_DB_NAME, NEON_DB_USER, NEON_DB_PASSWORD]):
+    try:
+        db_pool = pool.ThreadedConnectionPool(
+            minconn=1,
+            maxconn=5,
+            host=NEON_DB_HOST,
+            database=NEON_DB_NAME,
+            user=NEON_DB_USER,
+            password=NEON_DB_PASSWORD,
+            port=NEON_DB_PORT,
+            sslmode='require'
+        )
+        print("Pool de conexiones a la base de datos inicializado exitosamente.")
+    except Exception as e:
+        print(f"Error al inicializar el pool de conexiones: {e}")
+else:
+    print("Dashboard iniciado sin conexión a base de datos. Revisa las variables NEON_DB_* del entorno.")
 
 server = Flask(__name__)
 app = Dash(__name__, server=server, url_base_pathname='/dashboard/')
@@ -491,25 +495,25 @@ def update_dashboard_content(n_intervals):
                 dash_html.P(f"ONGs Revisadas en {mes_anio_actual_from_cache}", style={'color': COLOR_SECUNDARIO_TEXTO, 'fontSize': '14px', 'margin': '0', 'fontFamily': FONT_FAMILY_SECUNDARIA}),
                 dash_html.H2(str(total_ongs_current_month if total_ongs_current_month is not None else 'N/A'), style={'color': COLOR_PRINCIPAL_TEXTO, 'fontSize': '38px', 'margin': '10px 0', 'fontFamily': FONT_FAMILY_PRINCIPAL, 'fontWeight': 'bold'}),
                 dash_html.P(format_delta_text(total_ongs_delta), style=get_delta_style(total_ongs_delta)),
-                dash_html.Div('👥', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '45px', 'opacity': '0.15'})
+                dash_html.Div('ONG', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '32px', 'opacity': '0.12', 'fontWeight': 'bold'})
             ]),
             dash_html.Div(style={**METRIC_CARD_STYLE, 'borderLeft': f'5px solid {COLOR_APROBADO}'}, children=[
                 dash_html.P(f"Aprobadas en {mes_anio_actual_from_cache}", style={'color': COLOR_SECUNDARIO_TEXTO, 'fontSize': '14px', 'margin': '0', 'fontFamily': FONT_FAMILY_SECUNDARIA}),
                 dash_html.H2(str(aprobadas_current_month if aprobadas_current_month is not None else 'N/A'), style={'color': COLOR_APROBADO, 'fontSize': '38px', 'margin': '10px 0', 'fontFamily': FONT_FAMILY_PRINCIPAL, 'fontWeight': 'bold'}),
                 dash_html.P(format_delta_text(aprobadas_delta), style=get_delta_style(aprobadas_delta)),
-                dash_html.Div('✅', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '45px', 'opacity': '0.15'})
+                dash_html.Div('OK', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '34px', 'opacity': '0.12', 'fontWeight': 'bold'})
             ]),
             dash_html.Div(style={**METRIC_CARD_STYLE, 'borderLeft': f'5px solid {COLOR_RECHAZADO}'}, children=[
                 dash_html.P(f"Rechazadas en {mes_anio_actual_from_cache}", style={'color': COLOR_SECUNDARIO_TEXTO, 'fontSize': '14px', 'margin': '0', 'fontFamily': FONT_FAMILY_SECUNDARIA}),
                 dash_html.H2(str(rechazadas_current_month if rechazadas_current_month is not None else 'N/A'), style={'color': COLOR_RECHAZADO, 'fontSize': '38px', 'margin': '10px 0', 'fontFamily': FONT_FAMILY_PRINCIPAL, 'fontWeight': 'bold'}),
                 dash_html.P(format_delta_text(rechazadas_delta), style=get_delta_style(rechazadas_delta)),
-                dash_html.Div('❌', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '45px', 'opacity': '0.15'})
+                dash_html.Div('NO', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '34px', 'opacity': '0.12', 'fontWeight': 'bold'})
             ]),
             dash_html.Div(style={**METRIC_CARD_STYLE, 'borderLeft': f'5px solid {COLOR_PENDIENTE}'}, children=[
                 dash_html.P("Pendientes (Mes Actual)", style={'color': COLOR_SECUNDARIO_TEXTO, 'fontSize': '14px', 'margin': '0', 'fontFamily': FONT_FAMILY_SECUNDARIA}),
                 dash_html.H2(str(pendientes_current_month if pendientes_current_month is not None else 'N/A'), style={'color': COLOR_PENDIENTE, 'fontSize': '38px', 'margin': '10px 0', 'fontFamily': FONT_FAMILY_PRINCIPAL, 'fontWeight': 'bold'}),
                 dash_html.P("Requieren atención", style={'color': COLOR_SECUNDARIO_TEXTO, 'fontSize': '12px', 'margin': '0', 'fontFamily': FONT_FAMILY_SECUNDARIA}),
-                dash_html.Div('⏳', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '45px', 'opacity': '0.15'})
+                dash_html.Div('P', style={'position': 'absolute', 'top': '20px', 'right': '20px', 'fontSize': '34px', 'opacity': '0.12', 'fontWeight': 'bold'})
             ]),
         ]),
 
@@ -533,12 +537,11 @@ INDEX_HTML = """
   <meta charset="UTF-8">
   <title>Dashboard de Estadísticas - ONGs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Open Sans', sans-serif;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f8f9fa;
       color: #212529;
     }
@@ -546,7 +549,7 @@ INDEX_HTML = """
         text-align: center;
         margin-top: 20px;
         color: #212529;
-        font-family: 'Roboto', sans-serif;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         font-weight: 700;
     }
     iframe {

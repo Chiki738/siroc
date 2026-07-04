@@ -5,7 +5,7 @@ function LayoutAdmin() {
   return (
     <>
       <Header />
-      <main className="mx-5 mt-4">
+      <main className="app-main">
         <Outlet />
       </main>
     </>

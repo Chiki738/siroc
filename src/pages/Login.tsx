@@ -1,66 +1,72 @@
-import "../assets/styles/Login.css";
 import logo from "../assets/img/logo.png";
+import { ArrowRight, Database, ShieldCheck, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useAuthService } from "../hooks/useAuthService";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuthService();
+  const { login, loading } = useAuthService();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     login(email, password);
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-secondary bg-gradient">
-      <div
-        className="d-flex shadow rounded overflow-hidden bg-white"
-        style={{ maxWidth: "750px", width: "100%" }}>
-        {/* Columna izquierda */}
-        <div
-          className="p-4 bg-light d-flex flex-column justify-content-center align-items-center"
-          style={{ width: "50%" }}>
-          <img
-            src={logo}
-            alt="Logo"
-            className="mb-3"
-            style={{ width: "70%" }}
-          />
-          <p
-            className="text-center text-black px-3"
-            style={{ fontSize: "14px" }}>
-            Plataforma para registrar y validar ONGs y asociaciones civiles en
-            Perú.
-            <br />
-            Simplifica el proceso de verificación con datos de{" "}
-            <strong>SUNAT</strong> y <strong>RENIEC</strong>.
-          </p>
+    <main className="auth-page">
+      <section className="auth-panel" aria-label="Acceso a SIROC">
+        <div className="auth-brand">
+          <img src={logo} alt="SIROC" className="auth-logo" />
+          <div>
+            <p className="page-kicker">Validación institucional</p>
+            <h1 className="auth-title">Control técnico para organizaciones civiles</h1>
+            <p className="auth-copy mt-3">
+              Registra, contrasta y revisa datos de organizaciones civiles con
+              apoyo de fuentes oficiales como SUNAT y RENIEC.
+            </p>
+          </div>
+          <div className="auth-highlights" aria-label="Capacidades del sistema">
+            <span className="auth-highlight">
+              <ShieldCheck size={20} aria-hidden="true" />
+              Verificación documental centralizada
+            </span>
+            <span className="auth-highlight">
+              <Database size={20} aria-hidden="true" />
+              Consulta integrada de datos públicos
+            </span>
+          </div>
         </div>
 
-        {/* Columna derecha */}
-        <form
-          className="p-5 d-flex flex-column justify-content-center"
-          style={{ width: "50%" }}
-          onSubmit={handleSubmit}>
-          <h3 className="mb-4 text-center text-black fw-bold">
-            INICIAR SESIÓN
-          </h3>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <p className="page-kicker">Panel administrativo</p>
+          <h2 className="auth-title">Iniciar sesión</h2>
+          <p className="auth-subtitle">
+            Accede para revisar solicitudes, validar expedientes y actualizar
+            estados.
+          </p>
 
+          <label className="form-label fw-semibold" htmlFor="email">
+            Correo electrónico
+          </label>
           <input
+            id="email"
             type="email"
-            placeholder="Ingresar correo electrónico"
+            placeholder="nombre@organizacion.gob.pe"
             className="form-control mb-3"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
 
+          <label className="form-label fw-semibold" htmlFor="password">
+            Contraseña
+          </label>
           <input
+            id="password"
             type="password"
-            placeholder="Ingresar contraseña"
+            placeholder="Ingresa tu contraseña"
             className="form-control mb-3"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -69,21 +75,24 @@ function Login() {
 
           <button
             type="submit"
-            className="btn btn-primary fw-bold text-white w-100 mt-2">
-            Iniciar Sesión
+            className="btn btn-primary text-white w-100 mt-2 d-inline-flex align-items-center justify-content-center gap-2"
+            disabled={loading}>
+            {loading ? "Validando acceso..." : "Ingresar al panel"}
+            {!loading && <ArrowRight size={18} aria-hidden="true" />}
           </button>
 
-          <p className="text-center pt-4 mb-0" style={{ fontSize: "14px" }}>
-            ¿Desea registrar una ONG?&nbsp;
+          <p className="text-center pt-4 mb-0 text-muted">
+            ¿Necesitas registrar una organización?{" "}
             <Link
-              to="/Registro"
-              className="text-primary fw-semibold text-decoration-none">
-              Regístrate
+              to="/registro"
+              className="text-primary fw-semibold text-decoration-none d-inline-flex align-items-center gap-1">
+              <UserPlus size={16} aria-hidden="true" />
+              Crear registro
             </Link>
           </p>
         </form>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

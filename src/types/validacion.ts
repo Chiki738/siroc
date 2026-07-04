@@ -1,8 +1,13 @@
-// src/types/validacion.ts
+export type EstadoValidacion = "Pendiente" | "Validada" | "Rechazada";
+
 export interface Validacion {
   id: number;
-  ruc: string;
-  estadoValidacion: string;
-  comentario?: string;
+  ongId: number;
+  adminId: number | null;
+  ruc?: string;
+  estadoValidacion: EstadoValidacion | string;
+  comentario?: string | null;
   fechaValidacion: string;
+  nombreOng?: string;
+  rucOng?: string;
 }

@@ -1,19 +1,10 @@
-// src/hooks/useValidaciones.ts
 import { useState, useEffect } from "react";
 import { obtenerValidaciones } from "../services/validacionesService";
 import { obtenerTodasLasOngs } from "../services/ongsService";
 import type { Ong } from "./useOngs";
+import type { Validacion } from "../types/validacion";
 
-export interface Validacion {
-  id: number;
-  ongId: number;
-  adminId: number | null;
-  estadoValidacion: "Pendiente" | "Validada" | "Rechazada" | string;
-  comentario: string | null;
-  fechaValidacion: string;
-  nombreOng?: string; // añadimos nombre y ruc aquí
-  rucOng?: string;
-}
+export type { Validacion } from "../types/validacion";
 
 export function useValidaciones() {
   const [validaciones, setValidaciones] = useState<Validacion[]>([]);
@@ -32,7 +23,6 @@ export function useValidaciones() {
           throw new Error("Datos incompletos");
         }
 
-        // Relacionar ONG con Validación
         const validacionesConOng = validacionesData.map((v: Validacion) => {
           const ong = ongsData.find((o: Ong) => o.id === v.ongId);
           return {
@@ -53,5 +43,5 @@ export function useValidaciones() {
     fetchValidaciones();
   }, []);
 
-  return { validaciones, loading, error, setValidaciones }; // 🔁 Añadir setValidaciones
+  return { validaciones, loading, error, setValidaciones };
 }

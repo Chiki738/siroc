@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
-import { obtenerTodasLasOngs } from "../services/ongsService"; // Ajusta la ruta según tu proyecto
+import { obtenerTodasLasOngs } from "../services/ongsService";
+import type { Ong } from "../types/Ong";
 
-export interface Ong {
-  id: number;
-  nombre: string;
-  ruc: string;
-  representanteId: string;
-  sectorId: number;
-  regionId: number;
-  fechaRegistro: string;
-}
+export type { Ong } from "../types/Ong";
 
 export function useOngs() {
   const [ongs, setOngs] = useState<Ong[]>([]);

@@ -1,16 +1,14 @@
-const BASE_URL = "https://hexagonal-63ip.onrender.com/api/regiones";
+import { API_ENDPOINTS } from "../config/api";
 
-// Obtener todas las regiones
 export async function obtenerRegiones() {
-  const res = await fetch(BASE_URL);
+  const res = await fetch(API_ENDPOINTS.regiones);
   if (!res.ok) throw new Error("Error al obtener regiones");
   return res.json();
 }
 
-// Obtener solo el nombre de una región por su ID
 export async function obtenerNombreRegionPorId(id: number): Promise<string> {
   try {
-    const res = await fetch(`${BASE_URL}/${id}`);
+    const res = await fetch(`${API_ENDPOINTS.regiones}/${id}`);
     if (!res.ok) throw new Error("No se pudo obtener la región");
 
     const data = await res.json();

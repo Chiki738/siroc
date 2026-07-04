@@ -1,7 +1,8 @@
-// src/services/sunatService.ts
+import { API_ENDPOINTS } from "../config/api";
+
 export async function obtenerDatosSunatPorRuc(ruc: string) {
   try {
-    const response = await fetch(`https://hexagonal-63ip.onrender.com/api/sunat/ruc/${ruc}`);
+    const response = await fetch(`${API_ENDPOINTS.sunat}/ruc/${ruc}`);
 
     if (!response.ok) {
       throw new Error("No se pudo obtener la información del RUC");

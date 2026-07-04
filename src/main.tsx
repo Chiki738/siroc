@@ -4,6 +4,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./assets/styles/global.css";
 
 const queryClient = new QueryClient();
 const rootElement = document.getElementById("root");

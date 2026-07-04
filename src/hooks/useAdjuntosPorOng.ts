@@ -10,15 +10,35 @@ export function useAdjuntosPorOng(ongId: number | string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!ongId) return;
+    let activo = true;
 
-    setLoading(true);
-    setError(null);
+    const cargarAdjuntos = async () => {
+      if (!ongId) {
+        if (activo) {
+          setAdjuntos([]);
+          setLoading(false);
+        }
+        return;
+      }
 
-    obtenerAdjuntosPorOng(Number(ongId))
-      .then((data) => setAdjuntos(data))
-      .catch(() => setError("Error al cargar los adjuntos"))
-      .finally(() => setLoading(false));
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await obtenerAdjuntosPorOng(Number(ongId));
+        if (activo) setAdjuntos(data);
+      } catch {
+        if (activo) setError("Error al cargar los adjuntos");
+      } finally {
+        if (activo) setLoading(false);
+      }
+    };
+
+    void cargarAdjuntos();
+
+    return () => {
+      activo = false;
+    };
   }, [ongId]);
 
   return { adjuntos, loading, error };

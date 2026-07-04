@@ -1,38 +1,46 @@
 {
   "name": "siroc",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
+  "description": "Plataforma web para registrar, revisar y validar organizaciones civiles en Perú.",
   "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
-    "dev": "concurrently \"vite\" \"py src/dashboard/app.py\"",
-    "build": "vite build",
+    "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:dashboard\"",
+    "dev:web": "vite",
+    "dev:dashboard": "py src/dashboard/app.py",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "typecheck": "tsc -b",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@heroui/react": "^2.7.11",
-    "@tanstack/react-query": "^5.81.5",
-    "axios": "^1.10.0",
-    "bootstrap": "^5.3.7",
-    "lucide-react": "^0.525.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.2",
-    "sweetalert2": "^11.22.2",
-    "sweetalert2-react-content": "^5.1.0"
+    "@heroui/react": "^2.8.10",
+    "@tanstack/react-query": "^5.101.2",
+    "axios": "^1.18.1",
+    "bootstrap": "^5.3.8",
+    "lucide-react": "^1.23.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.1",
+    "sweetalert2": "^11.26.25",
+    "sweetalert2-react-content": "^5.1.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "concurrently": "^9.2.0",
-    "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^10.0.3",
+    "eslint": "^10.6.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.62.1",
+    "vite": "^6.4.3"
   }
 }

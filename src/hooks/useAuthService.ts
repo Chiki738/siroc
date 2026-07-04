@@ -13,8 +13,8 @@ export function useAuthService() {
     try {
       const success = await authService.login(email, password);
       if (success) {
-        Swal.fire("Éxito", "Inicio de sesión correcto", "success");
-        navigate("/Admin");
+        Swal.fire("Acceso confirmado", "Bienvenido al panel SIROC.", "success");
+        navigate("/admin");
       } else {
         Swal.fire("Error", "Correo o contraseña incorrectos", "error");
       }

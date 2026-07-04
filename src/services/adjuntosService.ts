@@ -1,11 +1,12 @@
+import { API_ENDPOINTS, UPLOADCARE_PUBLIC_KEY } from "../config/api";
+
 export const subirAdjunto = async (
   file: File,
   descripcion: string,
   ruc: string
 ) => {
-  // 1. Subir a Uploadcare
   const formDataUploadcare = new FormData();
-  formDataUploadcare.append("UPLOADCARE_PUB_KEY", "1cecbfdc229099b90529");
+  formDataUploadcare.append("UPLOADCARE_PUB_KEY", UPLOADCARE_PUBLIC_KEY);
   formDataUploadcare.append("UPLOADCARE_STORE", "1");
   formDataUploadcare.append("file", file);
 
@@ -28,7 +29,7 @@ export const subirAdjunto = async (
     ruc,
   };
 
-  const backendRes = await fetch("https://hexagonal-63ip.onrender.com/api/adjuntos/crear", {
+  const backendRes = await fetch(`${API_ENDPOINTS.adjuntos}/crear`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -53,7 +54,7 @@ export interface Adjunto {
 export const obtenerAdjuntosPorOng = async (
   ongId: number
 ): Promise<Adjunto[]> => {
-  const res = await fetch(`https://hexagonal-63ip.onrender.com/api/adjuntos/ong/${ongId}`);
+  const res = await fetch(`${API_ENDPOINTS.adjuntos}/ong/${ongId}`);
   if (!res.ok) {
     throw new Error("Error al obtener adjuntos de la ONG");
   }

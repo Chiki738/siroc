@@ -1,7 +1,5 @@
-// src/services/validacionesService.ts
 import axios from "axios";
-
-const API_URL = "https://hexagonal-63ip.onrender.com/api/validaciones";
+import { API_ENDPOINTS } from "../config/api";
 
 export const crearValidacion = async (ruc: string) => {
   const nuevaValidacion = {
@@ -10,17 +8,18 @@ export const crearValidacion = async (ruc: string) => {
     fechaValidacion: new Date().toISOString(),
   };
 
-  const response = await axios.post(`${API_URL}/crear`, nuevaValidacion);
+  const response = await axios.post(
+    `${API_ENDPOINTS.validaciones}/crear`,
+    nuevaValidacion
+  );
   return response.data;
 };
 
 export const obtenerValidaciones = async () => {
-  const response = await axios.get(API_URL);
-  return response.data; // Devuelve el arreglo de validaciones
+  const response = await axios.get(API_ENDPOINTS.validaciones);
+  return response.data;
 };
 
-// ✅ Nueva función para actualizar el estado de una validación
-// ✅ Ahora espera un objeto
 export const actualizarEstadoValidacion = async (
   id: number,
   data: {
@@ -29,22 +28,24 @@ export const actualizarEstadoValidacion = async (
   }
 ) => {
   try {
-    const response = await axios.put(`${API_URL}/actualizar/${id}`, data);
+    const response = await axios.put(
+      `${API_ENDPOINTS.validaciones}/actualizar/${id}`,
+      data
+    );
     return response.data;
   } catch (error) {
-    console.error("❌ Error al actualizar validación:", error);
+    console.error("Error al actualizar validación:", error);
     throw error;
   }
 };
 
-// ✅ Obtener validaciones por ID de ONG
 export const obtenerValidacionesPorOngId = async (ongId: number | string) => {
   try {
-    const response = await axios.get(`${API_URL}/ong/${ongId}`);
-    return response.data; // Devuelve el arreglo de validaciones de esa ONG
+    const response = await axios.get(`${API_ENDPOINTS.validaciones}/ong/${ongId}`);
+    return response.data;
   } catch (error) {
     console.error(
-      `❌ Error al obtener validaciones de ONG con ID ${ongId}:`,
+      `Error al obtener validaciones de ONG con ID ${ongId}:`,
       error
     );
     return [];

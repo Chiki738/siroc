@@ -60,13 +60,10 @@ export default function DetalleOng() {
   const { adjuntos: documentos, loading: loadingDocumentos } =
     useAdjuntosPorOng(ong?.id || "");
 
-  const [validaciones, setValidaciones] = useState<Validacion[]>(
-    validacionesOriginales
-  );
-
-  useEffect(() => {
-    setValidaciones(validacionesOriginales);
-  }, [validacionesOriginales]);
+  const [validacionesEditadas, setValidacionesEditadas] = useState<{
+    ongId: number;
+    data: Validacion[];
+  } | null>(null);
 
   const { actualizar } = useActualizarValidacion();
 
@@ -113,6 +110,11 @@ export default function DetalleOng() {
       </div>
     );
 
+  const validaciones =
+    validacionesEditadas?.ongId === ong.id
+      ? validacionesEditadas.data
+      : validacionesOriginales;
+
   const estadoFinal =
     validaciones.length > 0
       ? validaciones[validaciones.length - 1].estadoValidacion
@@ -127,11 +129,19 @@ export default function DetalleOng() {
 
   const verificarDato = (valorLocal: string, valorSunat?: string) => {
     if (!sunatData || !valorSunat)
-      return <span className="text-danger">❌</span>;
+      return (
+        <span className="verification-icon danger" title="No verificado">
+          <XCircle size={18} aria-hidden="true" />
+        </span>
+      );
     return compararTexto(valorLocal, valorSunat) ? (
-      <span className="text-success">✅</span>
+      <span className="verification-icon success" title="Coincide">
+        <CheckCircle size={18} aria-hidden="true" />
+      </span>
     ) : (
-      <span className="text-danger">❌</span>
+      <span className="verification-icon danger" title="No coincide">
+        <XCircle size={18} aria-hidden="true" />
+      </span>
     );
   };
 
@@ -156,14 +166,16 @@ export default function DetalleOng() {
       const success = await actualizar(selected.id, nuevoEstado);
       if (success) {
         setShowModal(false);
-        setValidaciones((prev) => {
-          if (prev.length === 0) return prev;
-          const nuevos = [...prev];
+        setValidacionesEditadas(() => {
+          if (validaciones.length === 0) {
+            return { ongId: ong.id, data: validaciones };
+          }
+          const nuevos = [...validaciones];
           nuevos[nuevos.length - 1] = {
             ...nuevos[nuevos.length - 1],
             estadoValidacion: nuevoEstado,
           };
-          return nuevos;
+          return { ongId: ong.id, data: nuevos };
         });
         Swal.fire({
           icon: "success",
@@ -183,23 +195,25 @@ export default function DetalleOng() {
   };
 
   return (
-    <div
-      className="container-fluid py-4"
-      style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      <div className="container">
-        <div className="mb-4">
-          <h1 className="display-5 fw-bold text-dark mb-2">Detalle de ONG</h1>
-          <p className="text-muted">Información completa de la organización</p>
+    <div className="detail-page">
+      <header className="page-header">
+        <div>
+          <p className="page-kicker">Expediente institucional</p>
+          <h1 className="page-title">Detalle de organización</h1>
+          <p className="page-description">
+            Información legal, documentos adjuntos y resultado de contraste con
+            fuentes oficiales.
+          </p>
         </div>
+      </header>
 
         <div className="row">
           <div className="col-lg-8">
-            {/* Información General */}
-            <div className="card mb-4 shadow-sm">
-              <div className="card-header bg-light">
+            <div className="card mb-4 section-card">
+              <div className="card-header">
                 <div className="d-flex align-items-center">
                   <Building size={20} className="text-muted me-2" />
-                  <h5 className="card-title mb-0">Información General</h5>
+                  <h2 className="card-title h5 mb-0">Información general</h2>
                 </div>
               </div>
               <div className="card-body">
@@ -265,7 +279,7 @@ export default function DetalleOng() {
                 <hr className="my-4" />
 
                 <div>
-                  <h5 className="fw-semibold mb-3">Representante Legal:</h5>
+                  <h2 className="h5 fw-semibold mb-3">Representante legal</h2>
                   {representante ? (
                     <div className="row">
                       <div className="col-md-6">
@@ -312,12 +326,11 @@ export default function DetalleOng() {
               </div>
             </div>
 
-            {/* Documentos */}
-            <div className="card mb-4 shadow-sm">
-              <div className="card-header bg-light">
+            <div className="card mb-4 section-card">
+              <div className="card-header">
                 <div className="d-flex align-items-center">
                   <FileText size={20} className="text-muted me-2" />
-                  <h5 className="card-title mb-0">Documentos</h5>
+                  <h2 className="card-title h5 mb-0">Documentos</h2>
                 </div>
               </div>
               <div className="card-body">
@@ -350,10 +363,9 @@ export default function DetalleOng() {
               </div>
             </div>
 
-            {/* Información de Contacto */}
-            <div className="card mb-4 shadow-sm">
-              <div className="card-header bg-light">
-                <h5 className="card-title mb-0">Información de Contacto</h5>
+            <div className="card mb-4 section-card">
+              <div className="card-header">
+                <h2 className="card-title h5 mb-0">Información de contacto</h2>
               </div>
               <div className="card-body">
                 <div className="d-flex align-items-center mb-3">
@@ -374,11 +386,10 @@ export default function DetalleOng() {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="col-lg-4">
-            <div className="card shadow-sm">
-              <div className="card-header bg-light">
-                <h5 className="card-title mb-0">Acciones</h5>
+            <div className="card section-card">
+              <div className="card-header">
+                <h2 className="card-title h5 mb-0">Acciones</h2>
               </div>
               <div className="card-body">
                 <button
@@ -402,21 +413,19 @@ export default function DetalleOng() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Modal */}
       {showModal && selected && (
-        <div
-          className="modal d-block"
-          tabIndex={-1}
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div className="modal d-block modal-backdrop-shell" tabIndex={-1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Cambiar Estado - {ong?.nombre}</h5>
+                <h2 className="modal-title h5">
+                  Cambiar estado de {ong?.nombre}
+                </h2>
                 <button
                   type="button"
                   className="btn-close"
+                  aria-label="Cerrar"
                   onClick={() => setShowModal(false)}></button>
               </div>
               <div className="modal-body">
